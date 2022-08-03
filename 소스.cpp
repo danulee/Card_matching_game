@@ -32,11 +32,8 @@ int GetKeyDown()
 	return 0;
 }
 //-----------------------------------------
-//2차원 배열로 이루어진 맵
-const int originMap[4][4] = { {1, 6, 1, 8},
-								{6, 2, 5, 4},
-								{7, 2, 5, 4},
-								{8, 3, 3, 7} };
+
+
 
 //포지션 구조체
 struct Pos
@@ -66,11 +63,13 @@ enum COLOR
 	YELLOW,
 	WHITE,
 };
-
+	
 //게임 매니저 클래스
 class GameManager
 {
 private:
+	//2차원 배열로 이루어진 맵
+	int originMap[4][4];
 	char questionMap[4][4];	//맞추고 있는 맵.
 	Pos player;				//플레이어 커서 위치.
 	Pos flipPos[2];			//뒤집은 카드 위치 저장.
@@ -82,6 +81,7 @@ public:
 	{
 		Init();		//게임 초기화
 		DrawBack();	//배경 그리기
+		
 
 		//게임 루프 시작
 		int key = 0;
@@ -120,6 +120,30 @@ public:
 		flipCount = 0;
 		spaceCount = 0;
 		matchedCardCount = 0;
+		setCard(); //카드 섞기
+	}
+
+	//숫자 랜덤으로 배치
+	void setCard() {
+		int a[16] = { 1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8 };
+		int num[16], b[16];
+		for (int i = 0; i < 16; i++) {
+			num[i] = (rand() % 16) ;
+			for (int j = 0; j < i; j++) {
+				if (num[i] == num[j]) i--;
+			}
+			
+		}
+		for (int i = 0; i < 16; i++) {
+			b[i] = a[num[i]];
+		}
+		int k = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				originMap[i][j] = b[k];
+				k++;
+			}
+		}
 	}
 
 	//카드 뒤집는 함수
@@ -247,11 +271,11 @@ public:
 	void DrawGameClear()
 	{
 		SetTextColor(YELLOW);
-		GotoXY(10, 3);
+		GotoXY(13, 3);
 		cout << "=========================";
-		GotoXY(10, 4);
+		GotoXY(13, 4);
 		cout << "======= C L E A R =======";
-		GotoXY(10, 5);
+		GotoXY(13, 5);
 		cout << "=========================";
 		SetTextColor(WHITE);
 	}
